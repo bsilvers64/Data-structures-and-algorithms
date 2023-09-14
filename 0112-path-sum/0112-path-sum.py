@@ -5,19 +5,22 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def haspathsum(self, root):
-        if root:
-            self.tsum += root.val
-            ans = self.haspathsum(root.left) or self.haspathsum(root.right)
-            if not root.left and not root.right and self.targetSum == self.tsum:
-                return True
-            self.tsum -= root.val
-            return ans
-        return False
+    sum = 0
+    def helper(self, root, targetSum):
+        if not root:
+            return False
+        self.sum += root.val
+        print(self.sum, targetSum)
+        ans = self.helper(root.left, targetSum) or self.helper(root.right, targetSum)
+        if not (root.left or root.right) and self.sum == targetSum:
+            print("hi")
+            return True
+        self.sum -= root.val
+        return ans
+
+
 
     def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
-        self.tsum = 0
-        self.targetSum = targetSum
-        return self.haspathsum(root)
-
-                
+        self.sum = 0
+        if not root: return False
+        return self.helper(root, targetSum)
