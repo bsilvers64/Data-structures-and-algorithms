@@ -1,16 +1,15 @@
 import math
 class Solution:
     def majorityElement(self, n: List[int]) -> int:
-        count = {}
+        res, count = n[0], 0
 
-        if len(n) < 3:
-            return n[0]
-        bar = math.floor(len(n)/2)
         for i in n:
-            if i not in count:
-                count[i] = 1
+            if count == 0:
+                res = i
+            if i == res:
+                count+=1
             else:
-                count[i] += 1
-                if count[i] > bar:
-                    return i
+                count-=1
 
+        
+        return res
