@@ -1,5 +1,6 @@
 class Solution:
     def reorganizeString(self, s: str) -> str:
+        if len(s) == 1: return s
         ans = ""
         count = collections.Counter(s)
         print(count)
@@ -19,6 +20,5 @@ class Solution:
             if temp1[0]: heapq.heappush(heap, temp1)
 
         print(ans)
-        for i in range(1, len(ans)):
-            if ans[i] == ans[i-1]: return ""
+        if ans[-2] == ans[-1]: return ""
         return ans
