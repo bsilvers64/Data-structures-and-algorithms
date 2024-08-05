@@ -1,26 +1,18 @@
+from collections import defaultdict
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
-        i = j = maxf = 0
-        w, ans = 0, 0
+        mp = defaultdict(int)
+        i, j, ans = 0, 0, 0
 
-
-        count = collections.defaultdict(int)
-
-        while (j < len(s)):
-            w += 1
-            count[s[j]] += 1
-            maxf = max(maxf, count[s[j]])
+        N = len(s)
+        while(i < N):
+            mp[s[i]] += 1
             
-            while(w - maxf > k):
-                count[s[i]] -= 1
-                i += 1
-                w -= 1
+            while((i - j + 1) - max(mp.values()) > k):
+                mp[s[j]] -= 1
+                if not mp[s[j]]: del mp[s[j]]
+                j += 1
 
-            
-            ans = max(ans, w)
-            j += 1
-
-
-
+            ans = max(ans, i - j + 1)
+            i += 1
         return ans
-            
