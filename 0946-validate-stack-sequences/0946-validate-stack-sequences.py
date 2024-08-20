@@ -5,7 +5,7 @@ class Solution:
         for n in pushed:
             st.append(n)
 
-            while st and i < len(pushed) and st[-1] == popped[i]:
+            while st and i < len(popped) and st[-1] == popped[i]:
                 st.pop()
                 i += 1
         
