@@ -10,35 +10,14 @@ class Solution:
         
         left = head
         right = self.mid(head)
-        tmp = right.next
+        right.next = tmp
         right.next = None
         right = tmp
 
-        l1 = self.sortList(left)
-        l2 = self.sortList(right)
+        l1 = sortList(left)
+        l2 = sortList(right)
 
         return self.merge(l1, l2)
 
-    def mid(self, head):
+    def mid(head):
         slow, fast = head, head.next
-        while fast and fast.next:
-            slow = slow.next
-            fast = fast.next.next
-        return slow
-    
-    def merge(self, l1, l2):
-        temp = dummy = ListNode()
-        while l1 and l2:
-            if l1.val < l2.val:
-                temp.next = l1
-                l1 = l1.next
-            else:
-                temp.next = l2
-                l2 = l2.next
-            temp = temp.next
-        if l1:
-            temp.next = l1
-        elif l2:
-            temp.next = l2
-        
-        return dummy.next
