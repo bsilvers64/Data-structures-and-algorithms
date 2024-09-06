@@ -9,15 +9,15 @@ class Solution:
         left = ans = ListNode()
         right = right_temp = ListNode()
         while curr:
-            node = ListNode(curr.val)
             if curr.val < x:
-                left.next = node
-                left = node
+                left.next = curr
+                left = curr
             else:
-                right.next = node
-                right = node                
+                right.next = curr
+                right = curr
             curr = curr.next
 
         left.next = right_temp.next
+        right.next = None
 
         return ans.next
