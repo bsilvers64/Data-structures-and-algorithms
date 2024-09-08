@@ -26,7 +26,5 @@ class Solution:
                     break
                 prev = n
                 n = n.next
-            print(dummy)
-            print("\n")
         
         return ans.next
