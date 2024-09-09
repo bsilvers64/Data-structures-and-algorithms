@@ -6,9 +6,7 @@ class Node:
 class MyCircularQueue:
 
     def __init__(self, k: int):
-        self.head, self.tail = Node(0), Node(0)
-        self.head.next = self.tail
-        self.tail.next = self.head
+        self.head, self.tail = None, None
         self.capacity = k
         self.curr_len = 0
 
@@ -19,7 +17,7 @@ class MyCircularQueue:
                 self.tail.next = node
                 self.tail = node
             else:
-                head, tail = node, node
+                self.head, self.tail = node, node
             self.curr_len += 1
             return True
         else:
@@ -31,7 +29,6 @@ class MyCircularQueue:
                 self.tail = self.tail.next
             self.head = self.head.next 
             self.curr_len -= 1
-
             return True
         else:
             return False
@@ -39,10 +36,12 @@ class MyCircularQueue:
     def Front(self) -> int:
         if self.head:
             return self.head.val
+        else: return -1
 
     def Rear(self) -> int:
         if self.tail:
             return self.tail.val
+        else: return -1
 
     def isEmpty(self) -> bool:
         if self.curr_len == 0: return True
