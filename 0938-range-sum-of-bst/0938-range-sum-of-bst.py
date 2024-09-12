@@ -11,8 +11,8 @@ class Solution:
             if root:
                 nonlocal ans
                 ans += root.val if (root.val <= high and root.val >= low) else 0
-                dfs(root.left)
-                dfs(root.right)
+                if root.val >= low: dfs(root.left)
+                if root.val <= high: dfs(root.right)
         
         dfs(root)
         return ans
