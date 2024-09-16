@@ -12,11 +12,11 @@ class Solution:
         q.append(root)
         while q:
             N = len(q)
+            ans.append(q[-1].val)
             while N:
                 N -= 1
                 curr = q.popleft()
                 if curr.left: q.append(curr.left)
                 if curr.right: q.append(curr.right)
-                if N == 0: ans.append(curr.val)
         
         return ans
