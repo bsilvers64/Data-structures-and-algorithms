@@ -1,7 +1,7 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
         visited = set()
-        ans = -1
+        ans = 0
         q = collections.deque()
 
         def addNode(r, c):
@@ -20,9 +20,8 @@ class Solution:
                 if grid[i][j] != 0:
                     num += 1
         
-
+        if num == 0: return 0
         while q:
-            print(q)
             for _ in range(len(q)):
                 r, c = q.popleft()
                 addNode(r+1, c)
@@ -31,4 +30,7 @@ class Solution:
                 addNode(r, c-1)
             ans += 1
         
-        return ans if len(visited) == num else -1
+        
+        if len(visited) == num:
+            return ans-1 
+        else: return -1
