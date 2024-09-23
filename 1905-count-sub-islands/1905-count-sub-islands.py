@@ -28,7 +28,6 @@ class Solution:
             for j in range(cols):
                 if grid2[i][j] and (i,j) not in visited:
                     x = dfs(i, j) 
-                    print(x)
                     if x: ans += 1
         
 
