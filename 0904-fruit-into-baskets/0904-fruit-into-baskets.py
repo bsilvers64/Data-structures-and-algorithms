@@ -1,15 +1,13 @@
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
-        basket = collections.defaultdict(int)
+        mp = collections.defaultdict(int)
         i, j, ans = 0, 0, 0
-
-        N = len(fruits)
-        while (i < N):
-            basket[fruits[i]] += 1
-            while len(basket) > 2:
-                basket[fruits[j]] -= 1
-                if not basket[fruits[j]]: del basket[fruits[j]]
-                j += 1
-            ans = max(ans, i - j + 1)
-            i += 1
+        while j < len(fruits):
+            mp[fruits[j]] += 1
+            while len(mp) > 2:
+                mp[fruits[i]] -= 1
+                if mp[fruits[i]] == 0: del mp[fruits[i]]
+                i += 1
+            ans = max(ans, j - i + 1)
+            j += 1
         return ans
