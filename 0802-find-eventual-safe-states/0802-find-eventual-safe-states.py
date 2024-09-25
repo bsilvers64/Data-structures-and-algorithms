@@ -3,7 +3,6 @@ class Solution:
         check = collections.defaultdict(bool)
 
         def dfs(node):
-            print(node)
             if not node: return True
             res = True
             for neighbor in node:
