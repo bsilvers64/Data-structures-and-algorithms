@@ -1,28 +1,27 @@
 class Solution:
-    def canFinish(self, numCourses: int, pre: List[List[int]]) -> bool:
+    def canFinish(self, numCourses: int, courses: List[List[int]]) -> bool:
         preq = collections.defaultdict(list)
+        for a, b in courses:
+            preq[a].append(b)
         
-        for i, j in pre:
-            preq[j].append(i)
-        visit = set()
-        path = set()
+        visited = 2
+        visiting = 1
+        unvisited = 0
+        state = [unvisited] * numCourses
 
         def dfs(node):
-            visit.add(node)
-            path.add(node)
+            if state[node] == visited: return True
+            if state[node] == visiting: return False
 
-            for n in preq[node]:
-                if n not in visit:
-                    if dfs(n): return True
-                elif n in path: return True
+            state[node] = visiting
+            for i in preq[node]:
+                if state[node] != visited and not dfs(i): return False
             
-            path.remove(node)
-            return False
-
-
+            state[node] = visited
+            return True
+            
 
         for i in range(numCourses):
-            if i not in visit:
-                if dfs(i): return False
+            if not dfs(i): return False
         
         return True
