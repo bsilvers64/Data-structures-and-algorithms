@@ -1,29 +1,27 @@
+from collections import deque, defaultdict
+
 class Solution:
     def minScore(self, n: int, roads: List[List[int]]) -> int:
-        mindis = collections.defaultdict(int)
-        adj = collections.defaultdict(list)
-        q = collections.deque()
-        ans = float('inf')
-
-        for i, j, k in roads:
-            adj[i].append([j, k])
-            adj[j].append([i, k])
-
-        mindis[1] = 0
-        q.append(1)
-
-        while q:
-            n = q.popleft()
-            for nei, dis in adj[n]:
-                if nei != 1:
-                    if nei in mindis:
-                        mindis[nei] = min(mindis[nei], dis)
-                    else:
-                        mindis[nei] = dis
-                        q.append(nei)
-                    ans = min(ans, dis)
+        adj = defaultdict(list)
         
-        return ans
-
-
-
+        # Build adjacency list
+        for a, b, d in roads:
+            adj[a].append((b, d))
+            adj[b].append((a, d))
+        
+        # BFS to traverse all reachable cities from city 1
+        visited = set()
+        q = deque([1])
+        visited.add(1)
+        min_score = float('inf')
+        
+        while q:
+            city = q.popleft()
+            
+            for neighbor, distance in adj[city]:
+                min_score = min(min_score, distance)  # Update minimum distance on any path
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    q.append(neighbor)
+        
+        return min_score
