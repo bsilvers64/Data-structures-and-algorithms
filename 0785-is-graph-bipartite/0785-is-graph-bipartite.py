@@ -1,24 +1,20 @@
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
-        blue, red = set(), set()
+        state = [0 for _ in range(len(graph))]
 
         def bfs(node):
-            if node in blue or node in red: return True
+            if state[node]: return True
             q = collections.deque()
             q.append(node)
-            blue.add(node)
+            state[node] = 1
             while q:
                 n = q.popleft()
-                bl = True if n in blue else False
                 for nei in graph[n]:
-                    if bl and nei in blue: return False
-                    elif not bl and nei in red: return False
-                    elif nei not in red and nei not in blue:
-                        if bl:
-                            red.add(nei)
-                        else:
-                            blue.add(nei)
+                    if not state[nei]: 
+                        state[nei] = -state[n]
                         q.append(nei)
+                    elif state[n] == state[nei]: return False
+                        
 
             return True
         
