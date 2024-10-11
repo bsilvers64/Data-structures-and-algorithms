@@ -1,33 +1,35 @@
 class Solution:
     def numEnclaves(self, grid: List[List[int]]) -> int:
         R, C = len(grid), len(grid[0])
-        res = 0
+        res, total = 0, 0
         visited = set()
-
-        def dfs(r, c):
-            if min(r, c) < 0 or r >= R or c >= C: return False
-            if (r in (0, R-1) or c in (0, C-1)) and grid[r][c]: return False
-            if not grid[r][c]: return True
-            visited.add((r, c))
-           
-            ans = True
-            directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
-            
-            for i, j in directions:
-                nr, nc = r + i, c + j
-                if (nr, nc) not in visited:
-                    ans &= dfs(nr, nc)
-                    print(nr,nc, ans)
-            
-            return ans
-
-
 
         for i in range(R):
             for j in range(C):
-                if grid[i][j] and (i, j) not in visited:
-                    k = len(visited)
-                    if dfs(i, j): 
-                        res += len(visited) - k
+                if grid[i][j]: total += 1
+        
 
-        return res
+        def dfs(r, c):
+            if min(r, c) < 0 or r >= R or c >= C or not grid[r][c]: return
+            visited.add((r, c))
+            directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+            for i, j in directions:
+                nr, nc = r + i, c + j
+                if (nr, nc) not in visited:
+                    dfs(nr, nc)
+
+
+        for i in range(R):
+            if grid[i][0]:
+                dfs(i, 0)
+            if grid[i][C-1]:
+                dfs(i, C-1)
+
+        for i in range(C):
+            if grid[0][i]:
+                dfs(0, i)
+            if grid[R-1][i]:
+                dfs(R-1, i)
+                
+
+        return total - len(visited)
