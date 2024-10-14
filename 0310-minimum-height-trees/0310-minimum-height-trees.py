@@ -14,13 +14,13 @@ class Solution:
         for i in range(n):
             if deg[i] == 1: q.append(i)
         
-        while len(deg) > 2:
+        
+        while n > 2:
             N = len(q)
+            n -= N
             while N:
-                n = q.popleft()
-                del deg[n]
-                
-                for nei in adj[n]:
+                node = q.popleft()
+                for nei in adj[node]:
                     deg[nei] -= 1
                     if deg[nei] == 1: 
                         q.append(nei)
