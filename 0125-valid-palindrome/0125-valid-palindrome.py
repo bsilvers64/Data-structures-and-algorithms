@@ -8,8 +8,8 @@ class Solution:
         l, r = 0, len(s)-1
 
         while l < r:
-            while not isvalid(s[l]): l += 1
-            while not isvalid(s[r]): r -= 1
+            while l < r and not isvalid(s[l]): l += 1
+            while l < r and not isvalid(s[r]): r -= 1
             if s[l].lower() != s[r].lower(): return False
             l += 1
             r -= 1
