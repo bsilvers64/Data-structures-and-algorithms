@@ -1,23 +1,25 @@
 class Solution:
     def backspaceCompare(self, s: str, t: str) -> bool:
-        s1, t1 = collections.deque(), collections.deque()
-
-        for i in s:
-            if i != "#": s1.append(i)
-            else:
-                if s1: s1.pop()
-
-        for i in t:
-            if i != "#": t1.append(i)
-            else:
-                if t1: t1.pop()
         
-        if len(s1) != len(t1): return False
-        i = 0
+        def nextValidChar(str, index):
+            backspaces = 0
+            while index >= 0:
+                if backspaces == 0 and str[index] != "#": break
+                elif str[index] == "#":
+                    backspaces += 1
+                else:
+                    backspaces -= 1
+                index -= 1
+            return index
 
-        while i < len(s1):
-            if s1[i] != t1[i]: return False
-            i += 1
+        i, j = len(s)-1, len(t)-1
 
-            
+        while i >= 0 or j >= 0:
+            i = nextValidChar(s, i)
+            j = nextValidChar(t, j)
+            ci = s[i] if i >= 0 else ""
+            cj = t[j] if j >= 0 else ""
+            if ci != cj: return False
+            i -= 1
+            j -= 1
         return True
