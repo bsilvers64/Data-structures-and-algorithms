@@ -17,4 +17,8 @@ class Solution:
                 nums1[r] = nums2[r2]
                 r2 -= 1
             r -= 1
-        
+
+        while r2 >= 0:
+            nums1[r] = nums2[r2]
+            r -= 1
+            r2 -= 1
