@@ -3,14 +3,16 @@ class Solution:
         s = sum(nums)
         if s & 1: return False
         s //= 2
+        mem = set()
+        mem.add(0)
+        mem.add(nums[0])
 
-        mem = {}
-        def dfs(i, total):
-            if (i, total) in mem: return mem[(i, total)]
-            if i >= len(nums):
-                return total == s
-            
-            mem[(i, total)] = dfs(i+1, total+nums[i]) or dfs(i+1, total)
-            return mem[(i, total)]
-        
-        return dfs(0, 0)
+        for i in range(1, len(nums)):
+            temp = set()
+            for num in mem:
+                temp.add(nums[i]+num)
+                temp.add(num)
+            mem = temp
+
+        return s in mem
+
