@@ -12,7 +12,8 @@ class Solution:
             for num in mem:
                 temp.add(nums[i]+num)
                 temp.add(num)
+                if s in temp: return True
             mem = temp
 
-        return s in mem
+        return False
 
