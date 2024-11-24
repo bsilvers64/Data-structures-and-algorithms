@@ -4,7 +4,7 @@ class Solution:
 
         def helper(i, j):
             if j >= len(t): return 1
-            if i >= len(s): return 0
+            if len(s) - i < len(t) - j: return 0
 
             if (i, j) in memo: return memo[(i, j)]
 
