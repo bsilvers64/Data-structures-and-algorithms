@@ -1,23 +1,16 @@
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
-        memo = {}
+        m, n = len(word2), len(word1)
+        dp = [[0 for _ in range(n+1)] for _ in range(m+1)]
 
-        def helper(i, j):
-            if (i, j) in memo: return memo[(i, j)]
-            if j == len(word2):
-                if i >= len(word1): return 0
-                else: return len(word1) - i
-            else:
-                if i == len(word1): return len(word2) - j
-
-
-            if word1[i] == word2[j]:
-                memo[(i, j)] = helper(i+1, j+1)
-            else:
-                insert = helper(i, j+1)
-                delete = helper(i+1, j)
-                replace = helper(i+1, j+1)
-                memo[(i, j)] = 1 + min(insert, delete, replace)
-            return memo[(i, j)]
+        for i in range(m+1): dp[i][0] = i
+        for i in range(n+1): dp[0][i] = i
         
-        return helper(0, 0)
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+                if word2[i-1] == word1[j-1]:
+                    dp[i][j] = dp[i-1][j-1]
+                else:
+                    dp[i][j] = 1 + min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) 
+        
+        return dp[-1][-1]
