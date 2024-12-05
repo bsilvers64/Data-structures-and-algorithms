@@ -3,12 +3,16 @@ class Solution:
         M, N = len(image), len(image[0])
         directions = [[0, 1], [-1, 0], [1, 0], [0, -1]]
         og_color = image[sr][sc]
-
-        def dfs(i, j):
-            if min(i, j) < 0 or i >= M or j >= N or image[i][j] != og_color or image[i][j] == color: return
-            image[i][j] = color
-            for r, c in directions:
-                dfs(i + r, j + c)
-        
-        dfs(sr, sc)
+        queue = collections.deque()
+        def bfs(i, j):
+            queue.append((sr, sc))
+            image[sr][sc] = color
+            while queue:
+                i, j = queue.popleft()
+                for r, c in directions:
+                    nr, nc = i + r, j + c
+                    if min(nr, nc) < 0 or nr >= M or nc >= N or image[nr][nc] != og_color or image[nr][nc] == color: continue
+                    image[nr][nc] = color
+                    queue.append((nr, nc))
+        bfs(sr, sc)
         return image
