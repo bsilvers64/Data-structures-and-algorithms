@@ -1,11 +1,10 @@
 class Solution:
     def climbStairs(self, n: int) -> int:
-        dp0, dp1 = 1, 2
-        if n == 1: return dp0
-        while n-2 > 0:
-            temp = dp1 + dp0
-            dp0 = dp1
-            dp1 = temp
-            n -= 1
-        return dp1
-
+        mem = collections.defaultdict()
+        def dfs(i):
+            if i in mem: return mem[i]
+            if i == n: return 1
+            elif i > n: return 0
+            mem[i] = dfs(i+1) + dfs(i+2)
+            return mem[i]
+        return dfs(0)
