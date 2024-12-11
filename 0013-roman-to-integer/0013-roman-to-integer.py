@@ -11,16 +11,14 @@ class Solution:
         }
 
         total, i = 0, 0
-        while i < len(s):
-            #print(i, total)
-            if i < len(s)-1:
-                if _map[s[i]] >= _map[s[i+1]]:
-                    total += _map[s[i]]
-                    i += 1
-                else:
-                    total += (_map[s[i+1]] - _map[s[i]])
-                    i += 2
-            else: break
+        while i < len(s)-1:
+            if _map[s[i]] >= _map[s[i+1]]:
+                total += _map[s[i]]
+                i += 1
+            else:
+                total += (_map[s[i+1]] - _map[s[i]])
+                i += 2
+
         if i == len(s)-1: total += _map[s[i]]
 
         return total 
