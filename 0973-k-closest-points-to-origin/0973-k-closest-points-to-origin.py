@@ -1,11 +1,11 @@
-from heapq import heapify, heappop, heappush
-from math import sqrt, pow
+import heapq
 class Solution:
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
-        dis = []
-        for i in points:
-            heappush(dis, [-sqrt(pow(i[0], 2) + pow(i[1], 2)), i])
-            if len(dis) > k:
-                heappop(dis)
-
-        return [i[1] for i in dis]
+        res = []
+        for point in points:
+            dis = pow(pow(point[0], 2) + pow(point[1], 2), 0.5)
+            heapq.heappush(res, [-dis, point])
+            if len(res) > k: heapq.heappop(res)
+        
+        ans = [i[1] for i in res]
+        return ans
