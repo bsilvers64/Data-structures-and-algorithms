@@ -1,18 +1,16 @@
+from operator import add, mul, sub, truediv
+
+
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        st = collections.deque()
-        ops = {'+', '/', '*', '-'}
-        for i in tokens:
-            if i not in ops:
-                st.append(int(i))
+        stack = collections.deque()
+        operators = {"+": add, "-": sub, "*": mul, "/": truediv}
+        for token in tokens:
+            if token not in operators:
+                stack.append(int(token))
             else:
-                y = st.pop()
-                x = st.pop()
-                if i == '+': st.append(x+y)
-                elif i == '*': st.append(x*y)
-                elif i == '-': st.append(x-y)
-                elif i == '/': st.append(int(x/y))
-            #print(st, i)
-            
-           
-        return int(st[0])                                
+                operand1 = stack.pop()
+                operand2 = stack.pop()
+                stack.append(int(operators[token](operand2, operand1)))
+        
+        return stack[0]
