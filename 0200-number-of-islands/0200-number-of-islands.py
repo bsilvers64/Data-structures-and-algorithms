@@ -4,12 +4,10 @@ class Solution:
 
         directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
         M, N = len(grid), len(grid[0])
-
-        visited = set()
         
         def dfs(i, j):
-            if 0 <= i < M and 0 <= j < N and grid[i][j] == "1" and (i, j) not in visited:
-                visited.add((i, j))
+            if 0 <= i < M and 0 <= j < N and grid[i][j] == "1":
+                grid[i][j] = "0"
                 for r, c in directions:
                     dfs(i + r, j + c)
             else:
@@ -17,7 +15,7 @@ class Solution:
         
         for i in range(M):
             for j in range(N):
-                if grid[i][j] == "1" and (i, j) not in visited:
+                if grid[i][j] == "1":
                     dfs(i, j)
                     count += 1
         
