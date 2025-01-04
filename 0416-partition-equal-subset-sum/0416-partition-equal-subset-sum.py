@@ -1,19 +1,19 @@
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        s = sum(nums)
-        if s & 1: return False
-        s //= 2
-        mem = set()
-        mem.add(0)
-        mem.add(nums[0])
+        memo = {}
+        tot = sum(nums)
+        target = tot//2
 
-        for i in range(1, len(nums)):
-            temp = set()
-            for num in mem:
-                temp.add(nums[i]+num)
-                temp.add(num)
-                if s in temp: return True
-            mem = temp
+        if tot % 2 != 0: return False
 
-        return False
+        def dfs(i, total):
+            if target == total:
+                return True
+            if total > target or i >= len(nums):
+                return False
+            if (i, total) in memo: return memo[(i, total)]
+            
+            memo[(i, total)] = dfs(i+1, total+nums[i]) or dfs(i+1, total)
+            return memo[(i, total)]
 
+        return dfs(0, 0)
