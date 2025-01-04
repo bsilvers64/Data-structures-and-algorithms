@@ -1,26 +1,38 @@
 class Solution:
     def myAtoi(self, s: str) -> int:
-        s = s.lstrip()
-        negative = 1
-        if s == "": return 0
-        if s[0] == '-': 
-            negative = -1
-            s = s[1:]
-        elif s[0] == "+":
-            s = s[1:]
-        
+        state, value, i, sign = 0, 0, 0, 1
 
-        ans = 0
-        for i in range(len(s)):
-            if not s[i].isdigit():
-                break
-            else:
-                ans = 10 * ans + int(s[i])
-        
-        ans *= negative
+        if not len(s): return 0
 
-        ans = min(ans, 2 ** 31 - 1)
-        ans = max(ans, -2 ** 31)
-    
-        return ans
+        while i < len(s):
+            char = s[i]
+            if state == 0:
+                if char.isdigit():
+                    state = 2
+                    value = value * 10 + int(char)
+                elif char == " ":
+                    state == 0
+                elif char == "+" or char == "-":
+                    state = 1
+                    sign = 1 if char == "+" else -1
+                else:
+                    return 0
+            elif state == 1:
+                if char.isdigit():
+                    state = 2
+                    value = value * 10 + int(char)
+                else:
+                    return 0
+            elif state == 2:
+                if char.isdigit():
+                    state = 2
+                    value = value * 10 + int(char)
+                else:
+                    break
 
+            i += 1
+
+        value *= sign
+        value = min(2**31-1, value)
+        value = max(-(2**31), value)   
+        return value             
