@@ -1,12 +1,10 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        if len(nums) == 1: return nums[0]
-        dp0, dp1 = nums[0], max(nums[0], nums[1])
-        if len(nums) == 2: return dp1
+        mem = {}
+        def robMax(i, loot):
+            if i >= len(nums): return loot
+            if (i, loot) in mem: return mem[(i, loot)]
+            mem[(i, loot)] = max(robMax(i+2, loot+nums[i]), robMax(i+1, loot))
+            return mem[(i, loot)]
 
-        for i in range(2, len(nums)):
-            temp = max(dp1, nums[i] + dp0)
-            dp0 = dp1
-            dp1 = temp
-
-        return dp1
+        return robMax(0, 0)
