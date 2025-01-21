@@ -1,24 +1,26 @@
 class Solution:
-    def canFinish(self, numCourses: int, pre: List[List[int]]) -> bool:
-        preq = collections.defaultdict(list)
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        prereqs = defaultdict(list)
+        for course, prereq in prerequisites:
+            prereqs[course].append(prereq)
         
-        for i, j in pre:
-            preq[i].append(j)
-        visited = set()
-        visiting = set()
+        VISITED = 2
+        VISITING = 1
+        UNVISITED = 0
+        node_state = [UNVISITED] * numCourses
 
-        def dfs(node):
-            if node in visited: return False
-            elif node in visiting: return True
+        def dfs(course):
+            if node_state[course] == VISITED: return True
+            elif node_state[course] == VISITING: return False
             
-            visiting.add(node)
-            for neighbor in preq[node]:
-                if dfs(neighbor): return True
-            visited.add(node)
-            visiting.remove(node)
-            return False
+            node_state[course] = VISITING
+            for pre in prereqs[course]:
+                if not dfs(pre): return False
 
-        for i in range(numCourses):
-            if dfs(i): return False
+            node_state[course] = VISITED
+            return True
+        
+        for course in range(numCourses):
+            if not dfs(course): return False
 
         return True
