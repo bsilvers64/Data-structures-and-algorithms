@@ -1,34 +1,28 @@
 class Solution:
-    def findOrder(self, numCourses: int, courses: List[List[int]]) -> List[int]:
-        preq = collections.defaultdict(list)
-        for a, b in courses:
-            preq[a].append(b)
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        order = []
+        prereqs = defaultdict(list)
+        for course, prereq in prerequisites:
+            prereqs[course].append(prereq)
         
-        visited = 2
-        visiting = 1
-        unvisited = 0
+        VISITED = 2
+        VISITING = 1
+        UNVISITED = 0
+        node_state = [UNVISITED] * numCourses
 
-        state = [unvisited] * numCourses
-
-        ans = []
-
-        def dfs(node):
-            if state[node] == visited: return True
-            if state[node] == visiting: return False
-
-            state[node] = visiting
-
-            for n in preq[node]:
-                if state[n] != visited and not dfs(n): return False
+        def dfs(course):
+            if node_state[course] == VISITED: return True
+            elif node_state[course] == VISITING: return False
             
+            node_state[course] = VISITING
+            for pre in prereqs[course]:
+                if not dfs(pre): return False
 
-            state[node] = visited
-
-            ans.append(node)
+            order.append(course)
+            node_state[course] = VISITED
             return True
-
-        for i in range(numCourses):
-            if state[i] == 0: 
-                if not dfs(i): return []
         
-        return ans
+        for course in range(numCourses):
+            if not dfs(course): return []
+
+        return order
