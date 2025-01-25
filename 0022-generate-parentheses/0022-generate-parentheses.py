@@ -1,15 +1,19 @@
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
         ans = []
+        paranthesis = []
+        def recurse(op, cl):
+            nonlocal paranthesis
+            if not op and not cl:
+                ans.append(''.join(paranthesis[:]))
+            if op > 0:
+                paranthesis.append('(')
+                recurse(op-1, cl)
+                paranthesis.pop()
+            if cl > op:
+                paranthesis.append(')')
+                recurse(op, cl-1)
+                paranthesis.pop()
 
-        def adder(s, c, o):
-            if not c and not o: 
-                ans.append(s)
-                return
-            if c > o: 
-                adder(s + ')', c - 1, o)
-            if o > 0:
-                adder(s + '(', c, o - 1)
-
-        adder('(', n, n - 1)
+        recurse(n, n)
         return ans
