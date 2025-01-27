@@ -1,11 +1,18 @@
 from heapq import heappush, heappop
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        heap = []
         freq = Counter(nums)
+        N = len(nums)
+        bucket = [[] for _ in range(N + 1)]
+
 
         for num, count in freq.items():
-            heappush(heap, (count, num))
-            if len(heap) > k: heappop(heap)
+            bucket[count].append(num)
+
+        i, res = N, []
         
-        return [num for count, num in heap]
+        while len(res) != k:
+            for num in bucket[i]: res.append(num)
+            i -= 1
+        
+        return res
