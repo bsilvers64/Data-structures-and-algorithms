@@ -13,23 +13,17 @@ class Solution:
         flag = 1
         while q:
             number_of_nodes = len(q)
-            level = []
+            level = deque()
             for i in range(number_of_nodes):
-                if flag: 
-                    root = q.pop()
-                    if root.left:
-                        q.appendleft(root.left)
-                    if root.right:
-                        q.appendleft(root.right)
-                else:
-                    root = q.popleft()
-                    if root.right:
-                        q.append(root.right)
-                    if root.left:
-                        q.append(root.left)
-                level.append(root.val)
+                root = q.pop()
+                if root.left:
+                    q.appendleft(root.left)
+                if root.right:
+                    q.appendleft(root.right)
 
-            order.append(level)
+                if flag: level.append(root.val)
+                else: level.appendleft(root.val)
+
+            order.append(list(level))
             flag = 0 if flag else 1
-        
         return order
