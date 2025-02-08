@@ -1,26 +1,27 @@
 class Solution:
-    def ispal(self, s, i, j):
-        while i < j:
-            if s[i] != s[j]: return False
-            i += 1
-            j -= 1
+    def check_palindrome(self, s):
+        i = 0
+        while i < (len(s)//2):
+            if s[i] != s[len(s)-i-1]: return False
+            i += 1 
         return True
 
     def partition(self, s: str) -> List[List[str]]:
-        ans = []
-        part = []
+        
+        result = []
 
-        def dfs(i):
-            if i >= len(s): 
-                ans.append(part[:])
+        def dfs(index, parts):
+            if index >= len(s):
+                result.append(parts[:])
                 return
             
-            for j in range(i, len(s)):
-                if self.ispal(s, i, j):
-                    part.append(s[i:j+1])
-                    dfs(j+1)
-                    part.pop()
+            for j in range(index, len(s)):
+                if self.check_palindrome(s[index:j+1]):
+                    parts.append(s[index:j+1])
+                    dfs(j+1, parts)
+                    parts.pop()
 
-        dfs(0)
+        
+        dfs(0, [])
 
-        return ans
+        return result
