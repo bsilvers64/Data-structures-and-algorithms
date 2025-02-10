@@ -11,17 +11,14 @@ class Solution:
         lastPlateIndex1, lastPlateIndex2 = -1, -1
 
         for i in range(N):
-            if s[i] == "*": count += 1
-            prefixSum[i] = count
-
-        for i in range(N):
             if s[i] == "|": lastPlateIndex1 = i
             previousPlate[i] = lastPlateIndex1
 
             if s[N-i-1] == "|": lastPlateIndex2 = N-i-1
             nextPlate[N-i-1] = lastPlateIndex2
 
-        print(nextPlate, previousPlate)
+            if s[i] == "*": count += 1
+            prefixSum[i] = count
 
         for query in queries:
             start = query[0]
