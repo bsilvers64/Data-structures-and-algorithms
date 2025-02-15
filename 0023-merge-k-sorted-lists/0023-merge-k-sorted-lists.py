@@ -1,5 +1,4 @@
-from heapq import heappop, heappush
-
+from heapq import heappush, heappop
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -7,21 +6,18 @@ from heapq import heappop, heappush
 #         self.next = next
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        curr = ListNode()
+        dummy = curr
         heap = []
-
-        for i, node in enumerate(lists):
-            if node:
-                heappush(heap, (node.val, i, node))
+        for i in range(len(lists)):
+            head = lists[i]
+            if head: heappush(heap, (head.val, i, head))
         
-        dummy = ListNode()
-        curr = dummy
-
         while heap:
-            value, i, node = heappop(heap)
+            _, i, node = heappop(heap)
             curr.next = node
             curr = node
             node = node.next
-            if node:
-                heappush(heap, (node.val, i, node))
-
+            if node: heappush(heap, (node.val, i, node))
+        
         return dummy.next
