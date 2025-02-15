@@ -1,15 +1,23 @@
+import bisect
 class Solution:
     def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:
-        intervals = sorted(zip(startTime, endTime, profit))
+        jobs = sorted(zip(startTime, endTime, profit), key = lambda x: x[0])
+
         memo = {}
-        def dfs(i):
+
+        def backtrack(i):
+            if i >= len(jobs): return 0
             if i in memo: return memo[i]
-            if i == len(intervals): return 0
 
-            res = dfs(i+1)
+            # not including this interval
+            res = backtrack(i+1)
 
-            j = bisect.bisect(intervals, (intervals[i][1], -1, -1))
-            memo[i] = max(res, intervals[i][2] + dfs(j)) 
-            return memo[i]
+            # including this interval and moving to the next non-overlapping interval
+            j = bisect.bisect(jobs, (jobs[i][1], -1, -1))
+
+            res = max(res, jobs[i][2] + backtrack(j))
+
+            memo[i] = res
+            return res
         
-        return dfs(0)
+        return backtrack(0)
