@@ -1,20 +1,18 @@
-class Solution:
-    def maxSlidingWindow(self, A: List[int], B: int) -> List[int]:
-        i, j, temp, ans = 0, 0, [], []
-        heapq.heapify(temp)
-		
-        while (i < len(A)):
-            heapq.heappush(temp, [-A[i], i])
-            if (i - j + 1 == B):
-                if j <= temp[0][1]:
-                    ans.append(-temp[0][0])
-                else:
-                    while temp[0][1] < j:
-                        heapq.heappop(temp)
-                    #print(temp, j)
-                    ans.append(-temp[0][0])
+from heapq import heappush, heappop
 
-                if A[j] == -temp[0][0]: heapq.heappop(temp)
-                j += 1
-            i += 1
-        return ans
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        heap = []
+        l, r = 0, 0
+
+        res = []
+
+        while r < len(nums):
+            heappush(heap, [-nums[r], r])
+            if (r-l+1) == k:
+                while heap[0][1] < l: heappop(heap)
+                res.append(-heap[0][0])
+                l += 1
+            r += 1
+
+        return res
