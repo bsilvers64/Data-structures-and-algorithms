@@ -1,34 +1,38 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        posdig = set()
-        negdig = set()
-        col = set()
+        
+        res = []
+        board = [["." for _ in range(n)] for _ in range(n)]
 
-        board = [["."] * n for i in range(n)]
-        ans = []
+        columns = set()
+        posDiag = set()
+        negDiag = set()
 
-        def backtrack(r):
+        def dfs(r):
+            # we have finished all rows and hence found a suitable n-queen placement
             if r == n:
-                copy = [row for row in board]
-                ans.append(["".join(row) for row in copy])
-                return 
+                res.append(["".join(board[i]) for i in range(n)])
+                return
             
-            # iterating through all columns for row - r
+            # search for a position in all columns
             for c in range(n):
-                if c in col or (r+c) in posdig or (r-c) in negdig: continue
-                col.add(c)
-                posdig.add(r+c)
-                negdig.add(r-c)
+                if c in columns or r+c in posDiag or r-c in negDiag: continue
+            
+                # found a block so place the queen
                 board[r][c] = "Q"
+                columns.add(c)
+                posDiag.add(r+c)
+                negDiag.add(r-c)
 
-                backtrack(r+1)
+                # move on to next row
+                dfs(r+1)
 
-                col.remove(c)
-                posdig.remove(r+c)
-                negdig.remove(r-c)
+                # undo operation as we search further columns
                 board[r][c] = "."
+                columns.remove(c)
+                posDiag.remove(r+c)
+                negDiag.remove(r-c)
 
 
-        backtrack(0)
-
-        return ans
+        dfs(0)
+        return res
