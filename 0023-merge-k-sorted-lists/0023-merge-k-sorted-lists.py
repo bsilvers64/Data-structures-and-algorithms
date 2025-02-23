@@ -6,18 +6,31 @@ from heapq import heappush, heappop
 #         self.next = next
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        curr = ListNode()
-        dummy = curr
-        heap = []
-        for i in range(len(lists)):
-            head = lists[i]
-            if head: heappush(heap, (head.val, i, head))
+        if not lists: return None
         
+        dummy = ListNode()
+        curr = dummy
+        heap = []
+
+        # pushing the starting nodes of all linked-lists to min-heap
+        for index, first_node in enumerate(lists):
+            if first_node:
+                heappush(heap, [first_node.val, index, first_node])
+        
+        # popping nodes one-by-one from heap and adding their next nodes
         while heap:
-            _, i, node = heappop(heap)
+            _, index, node = heappop(heap)
+
+            # pointing the previous node's next to this node
             curr.next = node
+
+            # if next node afte this node exists, push to heap
+            if node.next:
+                next_node = node.next
+                heappush(heap, [next_node.val, index, next_node])
+            
+            # make this node as current
             curr = node
-            node = node.next
-            if node: heappush(heap, (node.val, i, node))
         
         return dummy.next
+                
