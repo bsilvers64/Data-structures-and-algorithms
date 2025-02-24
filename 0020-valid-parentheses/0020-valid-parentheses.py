@@ -1,19 +1,21 @@
 class Solution:
     def isValid(self, s: str) -> bool:
+        
+        # maps opening to their respective closing brackets
+        brackets = {')': '(', '}': '{', ']':'['}
+
         stack = []
-        opening = {'(', '{', '['}
-        for i in s:
-            if i in opening: stack.append(i)
-            elif not stack: return False
-            else:
-                if i == ')' and stack[-1] == '(':
+
+        for bracket in s:
+            # opening bracket - append to stack
+            if bracket not in brackets:
+                stack.append(bracket)
+            # closing bracket - pop from stack
+            elif stack and stack[-1] == brackets[bracket]:
                     stack.pop()
-                elif i == '}' and stack[-1] == '{':
-                    stack.pop()
-                elif i == ']' and stack[-1] == '[':
-                    stack.pop()                                      
-                else:
-                    print(stack[-1], i) 
-                    return False
-                
-        if len(stack) == 0: return True
+            else: 
+                # this means no bracket in stack and we are on a closing bracket
+                return False
+        
+        
+        return stack == []
