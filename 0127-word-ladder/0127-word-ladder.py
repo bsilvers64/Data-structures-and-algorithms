@@ -1,30 +1,53 @@
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        # if endword not in given list, then not possible to transform
         if endWord not in wordList: return 0
 
-        nei = defaultdict(list)
+        # maps patterns to a list of words that match that pattern
+        pattern_to_words = defaultdict(list)
 
+        # going through every word, creating all possible patterns
+        # and appending words to those pattern - keys
         for word in wordList:
-            for j in range(len(word)):
-                pattern = word[:j] + "*" + word[j+1:]
-                nei[pattern].append(word)
+            for i in range(len(word)):
+                pattern = word[:i] + "*" + word[i+1:]
+                pattern_to_words[pattern].append(word)
         
-        q = deque()
-        res = 1
-        q.appendleft(beginWord)
+        # start a Breadth-first-search starting the given beginWord
+        queue = deque()
+        steps = 1
+        queue.appendleft(beginWord)
         visited = set()
 
-        while q:
-            for i in range(len(q)):
-                word = q.pop()
-                visited.add(word)
-                if word == endWord: return res
+        while queue:
 
-                for j in range(len(word)):
-                    pattern = word[:j] + "*" + word[j+1:]
-                    for neiWord in nei[pattern]:
-                        if neiWord not in visited:
-                            q.appendleft(neiWord)
-            res += 1
-                    
+            # processing a level in BFS - 
+            for _ in range(len(queue)):
+                word = queue.pop()
+                visited.add(word)
+
+                # if word is endWord, means we finally transformed our beginWord
+                # so return the number of steps to reach this
+                if word == endWord:
+                    return steps
+
+                # going through all patterns given by this word
+                # and adding words that match those patterns, i.e. adding words
+                # the next level of BFS that differ to current word by 1 character
+
+                for i in range(len(word)):
+                    pattern = word[:i] + "*" + word[i+1:]
+
+                    for similar_word in pattern_to_words[pattern]:
+                        if similar_word not in visited:
+                            queue.appendleft(similar_word)
+            
+            # increment steps after processing each level
+            # each level represents all words differing to the previous level word by 1 character
+            steps += 1
+
+        # in case we reach here, means we couldn't tranform our word
         return 0
+
+
+
