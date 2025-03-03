@@ -21,7 +21,6 @@ class Solution:
                 elif nums[val-1] > 0:
                     nums[val-1] *= -1
         
-        print(nums)
         # this performs check for numbers 1 to N
         for i in range(0, N):
             if nums[i] >= 0: return i+1
