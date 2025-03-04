@@ -3,22 +3,23 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
-        if not m: 
-            nums1[0] = nums2[0]
-            exit
-        
-        r1, r2 = m-1, n-1
-        r = m+n-1
-        while r1 >= 0 and r2 >= 0:
-            if nums1[r1] > nums2[r2]:
-                nums1[r] = nums1[r1]
-                r1 -= 1
-            else:
-                nums1[r] = nums2[r2]
-                r2 -= 1
-            r -= 1
+        index = m+n-1
+        i, j = m-1, n-1
 
-        while r2 >= 0:
-            nums1[r] = nums2[r2]
-            r -= 1
-            r2 -= 1
+        while i >= 0 and j >= 0:
+            if nums1[i] >= nums2[j]:
+                nums1[index] = nums1[i]
+                i -= 1
+            else:
+                nums1[index] = nums2[j]
+                j -= 1
+            index -= 1
+        
+        # if num1 elements are over but num2s are left, we put those remaining ones in nums1
+        # otherwise if num2s are over it means, the rest is already sorted.
+
+        while j >= 0:
+            nums1[index] = nums2[j]
+            j -= 1
+            index -= 1
+        
