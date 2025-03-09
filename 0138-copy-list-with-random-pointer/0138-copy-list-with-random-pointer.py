@@ -9,18 +9,18 @@ class Node:
 
 class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
-        if not head: return None
-        oldToCopy = {}
+        node_map = defaultdict(Node)
+        node_map[None] = None
+
         curr = head
         while curr:
-            oldToCopy[curr] = Node(curr.val)
+            node_map[curr] = Node(curr.val)
+            curr = curr.next
+
+        curr = head
+        while curr:
+            node_map[curr].next = node_map[curr.next]
+            node_map[curr].random = node_map[curr.random]
             curr = curr.next
         
-        node = head
-        while node:
-            if node.next: oldToCopy[node].next = oldToCopy[node.next]
-            if node.random: oldToCopy[node].random = oldToCopy[node.random]
-            node = node.next
-        
-        return oldToCopy[head]
-        
+        return node_map[head]
