@@ -3,24 +3,20 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        
         pivot = None
-
-        for i in range(len(nums)-1, 0, -1):
-            if nums[i] > nums[i-1]:
-                pivot = i-1
+        for i in range(len(nums)-2, -1, -1):
+            if nums[i] < nums[i+1]: 
+                pivot = i
                 break
         else:
-            nums.reverse()
-            return
-        
-        swap = len(nums)-1
+            nums.reverse() 
+            return 
 
-        while nums[swap] <= nums[pivot]:
-            swap -= 1
-        
-        nums[swap], nums[pivot] = nums[pivot], nums[swap]
-        
-        nums[pivot+1:] = reversed(nums[pivot+1:])
+        for i in range(len(nums)-1, -1, -1):
+            if nums[i] > nums[pivot]:
+                nums[i], nums[pivot] = nums[pivot], nums[i]
+                break
 
-        return
+        nums[pivot+1::] = reversed(nums[pivot+1::])
+        
+        
