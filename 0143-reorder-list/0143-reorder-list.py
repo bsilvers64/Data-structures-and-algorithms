@@ -8,46 +8,34 @@ class Solution:
         """
         Do not return anything, modify head in-place instead.
         """
-        list1 = head
-        curr = head.next
-        dummy = ListNode(head.val)
-        list2 = dummy
+        slow, fast = head, head.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        
+        first, second = head, slow.next
+        slow.next = None
 
-        while curr:
-            x = ListNode(curr.val)
-            dummy.next = x
-            dummy = x
-            curr = curr.next
-
-        prev, curr = None, list2
-
-        N = 0
-        while curr:
+        prev, curr = None, second
+        while curr != None:
             temp = curr.next
             curr.next = prev
             prev = curr
             curr = temp
-            N += 1
-        
-        list2 = prev
+
+        second = prev
 
         toggle = 1
-
-        while N > 1:
+        while first:
             if toggle:
-                nxt1 = list1.next
-                list1.next = list2
-                list1 = nxt1
+                temp = first.next
+                first.next = second
+                first = temp
                 toggle = 0
             else:
-                nxt2 = list2.next
-                list2.next = list1
-                list2 = nxt2
+                temp = second.next
+                second.next = first
+                second = temp
                 toggle = 1
-            N -= 1
-            
-        list1.next = None
-        list2.next = None
-
 
         return head
