@@ -10,11 +10,11 @@ class Solution:
 
         squares = defaultdict(int)
         
-        num = n
-        while num != 1:
-            if num not in squares:
-                squares[num] = compute_square(num)
-                num = squares[num]
-            else: return False
+        slow, fast = n, n
+        while fast != 1:
+            slow = compute_square(slow)
+            fast = compute_square(fast)
+            fast = compute_square(fast)
+            if slow == fast and slow != 1: return False
 
         return True
