@@ -1,15 +1,15 @@
 class Solution:
     def reverse(self, x: int) -> int:
-        is_neg = x < 0
-        x = abs(x)
-
-        res = 0
+        num = 0
+        sign = 1 if x > 0 else -1
+        x *= -1 if x < 0 else 1
         while x:
-            digit = x%10
+            num = num * 10 + (x % 10)
             x //= 10
-
-            res = res * 10 + digit
-
-            if res > 2**31-1: return 0
         
-        return -res if is_neg else res
+        num *= sign
+
+        if -2**31 <= num <= 2**31-1:
+            return num
+        else:
+            return 0
