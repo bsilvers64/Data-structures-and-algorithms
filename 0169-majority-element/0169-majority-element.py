@@ -1,15 +1,13 @@
-import math
 class Solution:
-    def majorityElement(self, n: List[int]) -> int:
-        res, count = n[0], 0
-
-        for i in n:
-            if count == 0:
-                res = i
-            if i == res:
-                count+=1
+    def majorityElement(self, nums: List[int]) -> int:
+        maxCount = 1
+        majority_element = nums[0]
+        for i in range(1, len(nums)):
+            if nums[i] == majority_element:
+                maxCount += 1
             else:
-                count-=1
-
-        
-        return res
+                maxCount -= 1
+                if maxCount <= 0:
+                    majority_element = nums[i] 
+                    maxCount = 1
+        return majority_element
