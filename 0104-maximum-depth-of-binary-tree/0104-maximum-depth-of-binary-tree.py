@@ -7,18 +7,16 @@
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root: return 0
-        
-        q = collections.deque()
-        q.append(root)
-        ans = 0
+        queue = deque()
+        depth = 0
 
-        while q:
-            N = len(q)
-            while N:
-                curr = q.popleft()
-                if curr.left: q.append(curr.left)
-                if curr.right: q.append(curr.right)
-                N -= 1
-            ans += 1    
-        return ans        
-        
+        queue.appendleft(root)
+
+        while queue:
+            for _ in range(len(queue)):
+                node = queue.pop()
+                if node.left: queue.appendleft(node.left)
+                if node.right: queue.appendleft(node.right)
+            depth += 1
+
+        return depth
