@@ -1,44 +1,63 @@
-class Node:
-    def __init__(self, key, val):
-        self.key, self.val = key, val
-        self.next, self.prev = None, None
+class ListNode:
+    def __init__(self, key=None, val=None, prev=None, next=None):
+        self.val = val
+        self.key = key
+        self.prev = prev
+        self.next = next
+
 
 class LRUCache:
     def __init__(self, capacity: int):
-        self.cache = {}
         self.cap = capacity
+        
+        # left most node represent the least recently used value
+        self.left = ListNode()
 
-        self.left = Node(0, 0)
-        self.right = Node(0, 0)
-        self.left.next, self.right.prev = self.right, self.left
+        # right most nodes represent the most recently used value
+        self.right = ListNode()
 
-    def insert(self, node):
-        self.right.prev.next = node
-        node.prev = self.right.prev
+        self.left.next = self.right
+        self.right.prev = self.left
+        self.cache = {}
+
+
+    def remove(self, key):
+        ''' this function ejects a node from the linked list'''
+        if key in self.cache:
+            prevnode, nextnode = self.cache[key].prev, self.cache[key].next
+            prevnode.next = nextnode
+            nextnode.prev = prevnode
+            del self.cache[key]
+
+
+    def remove_lru(self):
+        ''' this function ejects the least recently used node from the left'''
+        self.remove(self.left.next.key)
+
+
+    def insert(self, key, val):
+        ''' this function inserts a node to the right-most, making it 
+            the most recently used '''
+        self.remove(key)
+        node = ListNode(key, val, prev=self.right.prev, next=self.right)
+        node.prev.next = node
         self.right.prev = node
-        node.next = self.right
+        self.cache[key] = node
 
-    def remove(self, node):
-        node.prev.next = node.next
-        node.next.prev = node.prev        
 
     def get(self, key: int) -> int:
         if key in self.cache:
-            self.remove(self.cache[key])
-            self.insert(self.cache[key])
-            return self.cache[key].val
-        return -1
-        
-    def put(self, key: int, value: int) -> None:
-        if key in self.cache:
-            self.remove(self.cache[key])
-        self.cache[key] = Node(key, value)
-        self.insert(self.cache[key])
+            val = self.cache[key].val
+            self.insert(key, val)
+            return val
+        else:
+            return -1
 
+
+    def put(self, key: int, value: int) -> None:
+        self.insert(key, value)
         if len(self.cache) > self.cap:
-            lru = self.left.next
-            self.remove(lru)
-            del self.cache[lru.key]  
+            self.remove_lru()
 
 
 # Your LRUCache object will be instantiated and called as such:
