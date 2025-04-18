@@ -1,26 +1,27 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        prereqs = defaultdict(list)
-        for course, prereq in prerequisites:
-            prereqs[course].append(prereq)
+        graph = defaultdict(list)
+        for course, preq in prerequisites:
+            graph[course].append(preq)
         
-        VISITED = 2
-        VISITING = 1
-        UNVISITED = 0
-        node_state = [UNVISITED] * numCourses
+        visited = set()
+        visiting = set()
 
-        def dfs(course):
-            if node_state[course] == VISITED: return True
-            elif node_state[course] == VISITING: return False
+        def dfs(node):
+            if node in visited:
+                return False
+            if node in visiting:
+                return True
             
-            node_state[course] = VISITING
-            for pre in prereqs[course]:
-                if not dfs(pre): return False
-
-            node_state[course] = VISITED
-            return True
+            visiting.add(node)
+            for prereq in graph[node]:
+                if dfs(prereq): return True
+            
+            visiting.remove(node)
+            visited.add(node)
+            return False
         
         for course in range(numCourses):
-            if not dfs(course): return False
-
+            if course not in visited and dfs(course): return False
+        
         return True
