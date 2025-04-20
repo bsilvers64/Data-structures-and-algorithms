@@ -1,10 +1,17 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        res = defaultdict(list)
-        for s in strs:
+        
+        # dictionary where the key is the character frequency count array of a string
+        # and value is a list of string that matches that frequency count array
+        char_map = defaultdict(list)
+
+        for word in strs:
             count = [0] * 26
-            for c in s:
-                count[ord(c)-ord('a')] += 1
-            key = tuple(count)
-            res[key].append(s)
-        return list(res.values())
+            for char in word:
+                count[ord(char) - ord('a')] += 1
+            char_map[tuple(count)].append(word)
+        
+        # create a list of the anagrams
+        group_anagrams = [anagrams for _, anagrams in char_map.items()]
+
+        return group_anagrams
