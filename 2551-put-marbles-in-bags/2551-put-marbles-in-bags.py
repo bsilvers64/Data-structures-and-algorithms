@@ -1,22 +1,24 @@
 from heapq import heappush, heappop
 class Solution:
     def putMarbles(self, weights: List[int], k: int) -> int:
-        N = len(weights)
         maxheap, minheap = [], []
-
-        # maxheap will store the min k-1 splits and minheap will store the max k-1 splits
+        splits = []
+        N = len(weights)
+        maxsum = 0
+        minsum = 0
 
         for i in range(N-1):
-            split = weights[i] + weights[i+1]
+            splits.append(weights[i] + weights[i+1])
+
+        for split in splits:
             heappush(minheap, split)
             heappush(maxheap, -split)
+            if len(minheap) > k-1: heappop(minheap)
+            if len(maxheap) > k-1: heappop(maxheap)
 
-            # heap sizes will always remain k-1
-            if len(maxheap) > (k-1): heappop(maxheap)
-            if len(minheap) > (k-1): heappop(minheap)
+        while maxheap: minsum += (-heappop(maxheap))
+        while minheap: maxsum += heappop(minheap)
 
-        mincost, maxcost = 0, 0
-        while maxheap: mincost += -heappop(maxheap)
-        while minheap: maxcost += heappop(minheap)
+        return maxsum - minsum
 
-        return maxcost - mincost
+        
