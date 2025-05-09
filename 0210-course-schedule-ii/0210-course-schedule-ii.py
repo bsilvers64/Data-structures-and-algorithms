@@ -1,53 +1,34 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        # keeps track of all nodes which we have visited
-        visited = set()
+        
+        UNVISITED = 0
+        VISITING = 1
+        VISITED = 2
+        
+        state = [0] * numCourses
 
-        # keeps track of nodes we are visiting currently / or are in our current path
-        visiting = set()
-
-        # create adjacency list of courses -> their pre-requisites
         graph = defaultdict(list)
 
-        for course, pre_req in prerequisites:
-            graph[course].append(pre_req)
+        for course, prerequisite in prerequisites:
+            graph[course].append(prerequisite)
 
-        # depth-fist-search to explore the graph
-        def dfs(node):
-            # node is already visited so no need to explore
-            if node in visited:
-                return False
+        def dfs(node: int) -> bool:
+            if state[node] == VISITED: return False
+            if state[node] == VISITING: return True
 
-            # we came across this node again, so cycle detected
-            if node in visiting:
-                return True
+            state[node] = VISITING
+
+            for parent in graph[node]:
+                if dfs(parent): return True
             
-            # we are now visiting this node
-            visiting.add(node)
-
-            # explore the node's neighbors
-            for neighbor in graph[node]:
-
-                # if function returns true means cycle exists
-                if dfs(neighbor): return True
-            
-
-            # finished visiting and the node is now visited
-            visiting.remove(node)
-            visited.add(node)
-
-            courses_order.append(node)
-
-            # no cycle was found so far so return False
+            state[node] = VISITED
+            course_order.append(node)
             return False
-        
-
-        courses_order = []
+                            
+        course_order = []
 
         for course in range(numCourses):
+            if state[course] == UNVISITED:
+                if dfs(course): return []
 
-            # if cycle exists, means we cannot finish all courses
-            if dfs(course): return []
-        
-        return courses_order
-
+        return course_order
