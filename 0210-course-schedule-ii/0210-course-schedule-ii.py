@@ -1,34 +1,30 @@
 class Solution:
-    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        
-        UNVISITED = 0
-        VISITING = 1
-        VISITED = 2
-        
-        state = [0] * numCourses
+    def findOrder(self, n: int, pre: List[List[int]]) -> List[int]:
+        u, vi, vd = 0, 1, 2
+        order = []
 
         graph = defaultdict(list)
 
-        for course, prerequisite in prerequisites:
-            graph[course].append(prerequisite)
+        for c, p in pre:
+            graph[c].append(p)
 
-        def dfs(node: int) -> bool:
-            if state[node] == VISITED: return False
-            if state[node] == VISITING: return True
+        state = [u] * n
 
-            state[node] = VISITING
+        def dfs(c):
+            if state[c] == vi: return False
+            elif state[c] == vd: return True
 
-            for parent in graph[node]:
-                if dfs(parent): return True
+            state[c] = vi
+
+            for prereq in graph[c]:
+                if not dfs(prereq): return False
             
-            state[node] = VISITED
-            course_order.append(node)
-            return False
-                            
-        course_order = []
+            state[c] = vd
+            order.append(c)
+            return True
+        
+        for i in range(n):
+            if state[i] == u: 
+                if not dfs(i): return []
 
-        for course in range(numCourses):
-            if state[course] == UNVISITED:
-                if dfs(course): return []
-
-        return course_order
+        return order
